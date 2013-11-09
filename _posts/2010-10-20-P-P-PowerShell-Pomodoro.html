@@ -1,0 +1,28 @@
+---
+layout: post
+title: P-P-PowerShell Pomodoro
+date: 2010-10-20 13:21:00
+---
+
+I have some time management issues, don't we all? Lately, I've been trying using the
+<a href="http://www.amazon.com/Pomodoro-Technique-Francesco-Cirillo/dp/1445219948?ie=UTF8&amp;tag=musihististhr-20&amp;link_code=btl&amp;camp=213689&amp;creative=392969" target="_blank">Pomodoro Technique</a>
+to overcome the little distractions that can easily scupper a good work day.
+<p style="text-align: left;"><a style="text-align: center;" href="http://www.amazon.com/Clearance-60-Minute-Kitchen-Mechanical-Counting/dp/B001S6A8XY?ie=UTF8&amp;tag=musihististhr-20&amp;link_code=bil&amp;camp=213689&amp;creative=392969" target="_blank"><img class="aligncenter" src="http://ws.amazon.com/widgets/q?MarketPlace=US&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL160_&amp;ASIN=B001S6A8XY&amp;tag=musihististhr-20" alt="(Price/piece)Clearance Sale! 60-Minute Tomato Kitchen Timer, Mechanical Counting Timer, Shower Timer" /></a>
+The biggest issue I (and many others) have with implementing the technique is also the central focal point; The <em>timer</em>. A timer is essential... preferably a loud, clanky, ticky, tomato shaped kitchen timer. This just isn't an option in a shared office.
+Now, there are plenty of software timers already out there. (There's even a <a href="http://groups.google.com/group/pomodorotechnique-timer?pli=1">Google group</a> for sharing the timers you've made). But what kind of software alchemist wouldn't make his own?</p>
+<p style="text-align: left;">In time, I may make a Silverlight timer with some capacity for the lists and notes required by the technique. For now, here's a quick PowerShell script to just do the timer part.
+<img class="aligncenter" src="http://3.bp.blogspot.com/_kIB_McdGwig/TL7sBnTgJwI/AAAAAAAAAEE/oX43UVAUcOI/s1600/p-p-pomodoro.png" border="0" alt="" />
+<code>
+$mins = $args[0]
+$start=$(get-date);
+$diff=$(get-date)-$start
+$total=new-object TimeSpan -argumentList 0,$mins,0
+while ($diff -lt $total) {
+&nbsp;&nbsp;write-progress -activity $diff -PercentComplete (($diff.TotalSeconds/$total.TotalSeconds)*100) -Status "Work!"
+&nbsp;&nbsp;sleep 1
+&nbsp;&nbsp;$diff=$(get-date)-$start
+}
+get-date
+</code>
+<a href="http://gist.github.com/raw/636380/cc63382fdc18554baeb617b3a2373de90a2aefe3/pomodoro.ps1">Download</a></p>
+

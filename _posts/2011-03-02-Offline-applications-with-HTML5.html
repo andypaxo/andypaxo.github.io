@@ -1,0 +1,12 @@
+---
+layout: post
+title: Offline applications with HTML5
+date: 2011-03-02 22:31:17
+---
+
+Like most web developers, I've recently been playing with HTML5 and CSS3. There's an absolute ton of stuff to discover, but right now I'll focus on the <a title="HTML5 Offline Web Application spec" href="http://www.w3.org/TR/html5/offline.html">Offline Web Application</a> aspect.
+
+The specifics of implementing offline applications are well documented elsewhere. But what isn't often mentioned is how to discover the required files for your application which should be listed in the cache manifest.
+
+A little google/binging around finds a handful of attempts to make this easier, but I have stumbled upon a quick way to a kind of poor man's dependency finding... Just fire up <a title="Fiddler Web Debugger" href="http://www.fiddler2.com/fiddler2/">Fiddler</a> when using the application and copy the file listing. This method is far from foolproof, but it beats tracking down each file by hand, especially when using add-ons like <a href="http://jqueryui.com">jQuery UI</a> which pull in other external files.
+

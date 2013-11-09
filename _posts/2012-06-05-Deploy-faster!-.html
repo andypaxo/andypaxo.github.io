@@ -1,0 +1,30 @@
+---
+layout: post
+title: Deploy faster! 
+date: 2012-06-05 11:00:41
+---
+
+Where I work, the process of putting out a new version of one of our products is slow. Actually, it's probably much faster than most places, but we're Agile with a capital A, and we don't stand for any kind of cumbersome process.
+
+Whenever we make changes, they are subjected to a rigorous quality control check. This usually takes a day or three, as we add a handful of small changes at a time to our products. After that, the deployment is performed by us developers. The deployment usually takes 10 to 15 minutes, and is a mix of automated scripts and manual steps that must be carried out by hand. As I said, not bad, but it could be much better. Specifically, the manual parts of the process have never been botched yet, but we don't want to wait for that to happen.
+
+Starting a new project recently prompted us to rethink deployments. We now have the process down from the aforementioned 15 minutes to<em> 30 seconds</em>. That's not 30 seconds to trigger a build, that's the whole thing.
+
+&nbsp;
+
+That's a massive reduction. We used two technologies to get there:
+<h2>One: A fully automated build script</h2>
+We used <a href="http://www.iis.net/download/webdeploy">MSDeploy </a>for this. It was, quite frankly, an absolute pain in the posterior to set up... and I'm not looking forward to modifying the script later on. It does work, though, and leaves nothing to be done by hand.
+<h2>Two: Deployment from a continuous integration server</h2>
+We used <a href="http://www.jetbrains.com/teamcity/">TeamCity</a>, as it was easy to set up for a .Net based project. We looked at Jenkins  and Go as well, but they required more work to get up and running.
+
+Using a CI server gives us a handful of speed gains. The most pleasing one for me is the ability to literally hit one button on the web interface to kick of the deploy. No messing around with remote desktop any more!
+
+The biggest speed gain, though is that we always have our compiled code sitting there, all packaged up and just waiting to be deployed. Until now we always had to compile our code before sending it anywhere.
+
+&nbsp;
+
+It's a great feeling to be able to just "launch and leave" a deployment. We don't have a perfect solution yet (I would consider zero downtime perfect), but we are getting closer.
+
+&nbsp;
+

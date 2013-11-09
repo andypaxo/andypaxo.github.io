@@ -1,0 +1,18 @@
+---
+layout: post
+title: Five reasons to use version control on a throwaway script
+date: 2012-06-26 19:33:54
+---
+
+I've taken a new approach to version control. Now <em>all</em> code is versioned, even that one-shot CSV mangler that won't ever get used again. Here's why:
+<ol>
+	<li>It <em>will</em> get used again. Be honest, how many throwaway scripts do you actually throw away? Many of them far outlive what you were expecting</li>
+	<li>You need an out. When you've gone down the wrong path, getting to the last "known good" state is trivial with version control. Without, it can be close to impossible.</li>
+	<li>You need to collaborate. Sometimes you need a hand, and that's great, just share the code with your friend who knows everything about mangling CSVs... What, what are you doing? ... Oi! Step away from the zip file, buddy! We all know where that leads, and you have better things to do than figure out why "Mangler v21 Frank's copy new final version.zip" doesn't have Frank's most recent code in it.</li>
+	<li>Version control can educate and entertain. It can be not only interesting, but also informative to look through the history of how a small project has evolved.</li>
+	<li>Why not? It's ridiculously easy:
+<pre>git init
+<strong>git commit -am "I can haz repo"</strong></pre>
+Done! That wasn't too hard, was it?</li>
+</ol>
+

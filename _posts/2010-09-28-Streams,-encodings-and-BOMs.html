@@ -1,0 +1,46 @@
+---
+layout: post
+title: Streams, encodings and BOMs
+date: 2010-09-28 14:16:00
+---
+
+<h2>The problem</h2>
+If you ever see this kind of output from your application:
+<div style="text-align: center;"><em>â&euro;œThese are not Joeâ&euro;™s quotesâ&euro;</em></div>
+When you expected to see:
+<div style="text-align: center;">“<em>These are not Joe’s quotes</em>”</div>
+Then you have an issue with Unicode that may be solvable by inserting a <a href="http://en.wikipedia.org/wiki/Byte_order_mark">byte order mark</a> at the start of your output. See the Wikipedia link there for a full explanation of how the recipient of this text could mangle the bytes.
+<h2>The solution (for .NET)</h2>
+One way that this can happen in .NET is through the use of <span style="font-family: &amp;amp;amp;">StreamWriter</span>. If no encoding is specified the stream uses <span style="font-family: &amp;amp;amp;">Encoding.UTF8</span> by default. This is a UTF8 encoding <em>without</em> a byte order mark. The solution is to construct your own instance of the <span style="font-family: &amp;amp;amp;">Encoding</span> class with the settings you require.
+<h2>An example</h2>
+Take the following program:
+<pre>using System.IO;
+
+class TestEncoding {
+ static void Main() {
+  using (var writer = new StreamWriter(
+    "menu.csv"))
+   writer.WriteLine(
+    "Entrée,Joe’s Jalapeño Tacos");
+ }
+}</pre>
+If you run this and open the resulting file (menu.csv) in Excel, you will see this:
+<div class="separator" style="clear: both; text-align: center;"><a style="margin-left: 1em; margin-right: 1em;" href="http://3.bp.blogspot.com/_kIB_McdGwig/TKH2XRelBeI/AAAAAAAAADc/dKvoQRX7YEk/s1600/bad+encoding.png"><img src="http://3.bp.blogspot.com/_kIB_McdGwig/TKH2XRelBeI/AAAAAAAAADc/dKvoQRX7YEk/s1600/bad+encoding.png" border="0" alt="" /></a></div>
+That's not what we wanted at all. Try changing the constructor of the <span style="font-family: &amp;amp;amp;">StreamWriter</span>:
+<pre>using System.IO;<strong><span style="background-color: #ffe599;">
+<span style="color: #808080;">using System.Text;</span>
+</span></strong>class TestEncoding {
+ static void Main() {
+  var encodingWithBOM = <span style="color: #808080;"><strong style="background-color: #ffe599;">new UTF8Encoding(true)</strong>;</span>
+  using (var writer = new StreamWriter(
+    "menu.csv",
+    false,
+    <span style="color: #808080;"><strong style="background-color: #ffe599;">encodingWithBOM</strong></span>))
+   writer.WriteLine(
+    "Entrée,Joe’s Jalapeño Tacos");
+ }
+}</pre>
+Now our Excel file looks like this:
+<div class="separator" style="clear: both; text-align: center;"><a style="margin-left: 1em; margin-right: 1em;" href="http://1.bp.blogspot.com/_kIB_McdGwig/TKH4ib3d3-I/AAAAAAAAADg/ZhcCIDkawzY/s1600/good+encoding.png"><img src="http://1.bp.blogspot.com/_kIB_McdGwig/TKH4ib3d3-I/AAAAAAAAADg/ZhcCIDkawzY/s1600/good+encoding.png" border="0" alt="" /></a></div>
+Much better!
+

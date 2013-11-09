@@ -1,0 +1,29 @@
+---
+layout: post
+title: Web Tester
+date: 2010-06-03 01:43:00
+---
+
+<p>The hardest bugs to fix in software development are often concurrency problems. That is, bugs which are hard to find as they rely on multiple events occurring at overlapping intervals - often impossible to recreate reliably.</p>
+
+<p>With web applications, such as ours, the most straightforward way of replicating these problems so that they can be observed and fixed is to use a load testing tool. Given that such tools have been around for many years, we initially thought that this would be a more or less trivial kind of testing to implement. We were wrong.</p>
+
+<p>Trying freely available software, such as <a href="http://grinder.sourceforge.net/">The Grinder</a>, <a href="https://h10078.www1.hp.com/cda/hpms/display/main/hpms_content.jsp?zn=bto&amp;cp=1-11-126-17%5E8_4000_100__">LoadRunner</a> and a few other alternatives yielded little success after grappling with configuration files for a considerable stretch of time. On the other hand, the commercial solutions up for offer don't seem to be priced in proportion to what is on offer.</p>
+
+<p>So, following my Neanderthal instincts , I made a tool. Besides, this would give me a chance to brush up on basic concurrent programming (normally hidden from us by a veil of ASP.NET). To make things more interesting , this would be the firsthand 'from scratch' program I had built after reading through Bob Martin's excellent Agile Principles , Practices and Patterns .</p>
+
+<img alt="image" border="0" height="309" src="http://lh5.ggpht.com/_kIB_McdGwig/S9m_Qj5BmbI/AAAAAAAAACQ/Xtwg6fQNF6c/image%5B18%5D.png?imgmax=800" style="border: 0px none; display: block; float: none; margin-left: auto; margin-right: auto;" title="image" width="450" />
+<div align="center"><b>Web Tester in action</b></div>
+
+<p>The web tester (imaginative name) works by reading URLs to retrieve from a simple text file, hitting said URLs and recording the results. There's really not much more to it than that. </p>
+
+<p>The interesting components at the core of the Web Tester are the asynchronous request maker/handler and the input parser. the former being interesting due to heavy use of the framework, the latter interesting because of the lack thereof. </p>
+
+<p>Writing the tester was a great refresher course in basic 1.1 asynchronous development. While easy to dismiss as boring, this is still relevant often enough to justify revisiting once in a while .</p>
+
+<p>For anyone with a background in computer science , the immediate reaction to hearing the word 'parser' is to launch into yacc or antlr and rough out a grammar. For those with a more practical background, a pre-made technology or tool such as XML or Lua may come to mind. I, however, decided once again that reinventing the wheel would be the best option. The result came after a few hours of work, and considerably less pain than would be expected. Having said that, I would not recommend hand rolling a parser for anything more complex or any format intended for public consumption.</p>
+
+<div align="center"><img alt="image" border="0" height="245" src="http://lh4.ggpht.com/_kIB_McdGwig/S9m_Q5lXrJI/AAAAAAAAACU/WCB2B2dtsoE/image%5B15%5D.png?imgmax=800" style="border: 0px none; display: block; float: none; margin-left: auto; margin-right: auto;" title="image" width="448" /> </div><div align="center"><b>The script format</b></div>
+
+<p>In all, such a tool is a great little helper for day to day use. It's an example of making a simple tool, a <a href="http://www.faqs.org/docs/artu/ch01s06.html">good practice for any developer</a>. I'll post the source code if it's okay with the powers that be (my boss).</p>
+

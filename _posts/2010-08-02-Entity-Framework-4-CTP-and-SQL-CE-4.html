@@ -1,0 +1,18 @@
+---
+layout: post
+title: Entity Framework 4 CTP and SQL CE 4
+date: 2010-08-02 13:10:00
+---
+
+<p>Having seen the Scotts&#39; <a href="http://weblogs.asp.net/scottgu/archive/2010/07/16/code-first-development-with-entity-framework-4.aspx">Gu </a>and <a href="http://www.hanselman.com/blog/SimpleCodeFirstWithEntityFramework4MagicUnicornFeatureCTP4.aspx">Hanselman </a>announce the new version of Entity Framework (Magic Unicorn edition, no less), I thought I'd add some of the new 'Code First' goodness to learning / <a href="http://www.softwarealchemist.net/2010/08/learning-mvc-2-in-action.html">example app</a>.</p>
+
+<p>Here are a few things to be aware of when getting used to EF, especially the new release:</p>
+
+<h3>Entity Framework:</h3>
+
+<ul><li>Read the <a href="http://blogs.msdn.com/b/adonet/archive/2010/07/14/ctp4codefirstwalkthrough.aspx">Code First walkthrough</a> and the <a href="http://blogs.msdn.com/b/adonet/archive/2010/07/14/ctp4piwalkthrough.aspx">productivity improvements</a> pages at the same time (or as close as possible). You'll save some time doing this rather than doing things the long way and then cutting out code after reading the second page.</li><li>Pay very careful attention to the code samples, especially where <b>navigation properties are marked as virtual</b>. I didn't, and as a result, ended up debugging some very strange behaviour indeed. </li></ul>
+
+<h3>SQL CE:</h3>
+
+<ul><li>Using SQL CE is really easy. Just use the DbContext with no connection specified, and set the default connection as seen in Scott Hanselman's walkthrough. (You'll need to install and reference the runtime library first, of course)</li><li>There seems to be an issue storing datetime values in SQL. I get an"overflow" exception. No idea as of yet how to solve this.</li><li>There doesn't seem to be a good way to browse a SQL CE 4 database. SQL Management studio will attempt to open it, but gives a message to the effect of "I can only understand version 3"</li></ul>After getting past these few niggles, the latest EF is the cleanest, tidiest persistance layer I've seen yet.<ul></ul>
+

@@ -1,0 +1,29 @@
+---
+layout: post
+title: MbUnit profiling with PowerShell
+date: 2010-05-25 16:24:00
+---
+
+<p>Recently at work, our unit tests have been taking a while to run. This could be something to do with having over 4000 of them on a single project (and it looks like the answer to this is going to simply be that we don't need to run all of them all the time). But it would be nice to dig into what's happening.</p>
+
+<p>As with any performance improvement, the first task in making things faster is to find out what's slow. Many, many developer hours have been wasted in optimizing parts of programs which are responsible for only a small fraction of the execution time. To find out which tests are slowest, we're looking at the output from MbUnit itself, rather than using a full-on performance profiler.</p>
+
+<p>MbUnit output can be seen in a plethora of manners, including a handful of report formats and several GUI tools. In our particular case, we've been unable to use the GUI tools due to compatibility issues*. So we're looking at the XML report. There are many, many ways of analyzing XML, but seeing as we're hip and trendy .NET developers, let's use PowerShell. </p>
+
+<p>Pulling apart XML in PowerShell turns out to be embarrassingly easy. A combination of XPath functionality included in the framework and the xml type from PowerShell can be used to interrogate our output. The following 'one liner' extracts the fixture names and the run time (for all tests in the fixture) and displays the worst offenders:</p>
+<pre style="width:100%;overflow:scroll">([xml](cat mbunit.xml)).selectnodes('//fixture') | select name, @{n='time';e={$_.counter.duration}} | sort time | select -last 5 </pre>
+
+<p>Which makes an output like this:</p>
+
+<pre>
+name                                                                  time
+----                                                                  ----
+HtmlToRtfConverterSpecs+when_converting_an_html_string_that_contai... 0.23436449999999998
+WireUpdDependencyRegistryCommandSpecs+after_loading_the_container     0.32811029999999997
+ActivateRequirementHistoricallyControllerSpecs+when_activating_a_r... 0.46872899999999995
+RetrieveAllQuestionsForInspectionQuerySpecs+when_getting_the_answe... 0.671875
+DtoRepositorySpecs+when_checking_to_see_if_a_dto_exists_and_a_cook... 0.6874692
+</pre>
+<br/>
+<p>Alas, in our case there are no huge monster tests to target (though those last few are slower than they should be), but this snippet may help someone else with sluggish unit tests.</p>
+

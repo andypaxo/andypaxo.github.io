@@ -1,0 +1,18 @@
+---
+layout: post
+title: The difference between source code and text
+date: 2011-11-29 21:41:37
+---
+
+I was reading "<a href="http://blog.8thlight.com/josh-cheek/2011/11/28/three-reasons-to-roll-your-own-mocks.html">Three Reasons To Roll Your Own Mocks</a>" by Josh Cheek earlier today. One point, somewhat tangental to the thrust of his argument, stood out to me.
+<blockquote>"When you make changes, many tests may break. Perhaps you change the name of a method that it invokes on its dependent object. Now you must go update all your dynamic mocks to change the name of the method."</blockquote>
+What? When was the last time that you changed the name of a method in <em>more than one place</em>? If you've been using Eclipse, Visual Studio, or basically any other IDE, it should be a long, long time ago. Are you coding in vi? If so... WHY? Do you shun the basic refactoring tools in your IDE... WHY?
+
+Now, some technologies cripple the abilities of your IDE to treat code as code. For example, a mocking framework that requires you to enter method names as strings (which I think is what Josh was referring to). If you use one of these, your code is treated as text, which is a waste of the power you have on your desktop.
+
+I strongly recommend avoiding frameworks which make you treat your code as merely text. Not only does this reduce the usefulness of your development environment, it can also introduce errors that the compiler cannot identify which in turn produces bugs which are harder to identify and fix.
+
+It can be difficult to replace certain frameworks, but all modern programming languages have some form of reflection-enabled closure, delegate, anonymous method or lambda-expression which make it possible to make wrappers which actually use the classes and types in your own code. (Although such constructs can be very cumbersome... I'm looking at you, Java).
+
+So, treat your code as code, and help your tools help you.
+

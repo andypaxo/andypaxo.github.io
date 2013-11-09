@@ -1,0 +1,16 @@
+---
+layout: post
+title: Learning from iOS development
+date: 2012-06-21 17:05:22
+---
+
+I've been working on a (soon to be released) iPad app over the last couple of months. This was a little different to my usual diet of web /server side development, but easier to get into than expected.
+
+Going through the process was a learning curve. Here's what I know now that I didn't know before:
+
+<em>Objective C isn't all that bad</em>. The recent versions, with ARC are rather reminiscent of Java in both power and style. What is weird is the standard library. If you were looking for graphics routines, would you think to go to the string class? apparently the creator of NextStep would.
+
+<em>Use third party libraries liberally</em>. The built in libraries are not as comprehensive as you might be used to from other environments. Fortunately, there are many handy libraries available from within Xcode (and many more online, of course).
+
+<em>Don't even try ad-hoc deployment. </em>The officially supported route for releasing beta software is nothing short of diabolical. I almost deleted everything on my iPad trying to make out work. <a href="https://testflightapp.com/">TestFlight</a>, on the other hand is a miracle. We can now get a deployment from source to users in a couple of minutes. Added to that, their features for feedback are stellar. Just use it and don't look back!
+

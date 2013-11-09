@@ -1,0 +1,14 @@
+---
+layout: post
+title: SMACSS my styles up 
+date: 2012-06-01 21:38:17
+---
+
+There is a gulf of understanding between knowing the nuts and bolts of a technology and knowing how best to apply it.
+
+Recently, I was coding a web interface for the administration of a mobile app (the details aren't important to this post). The site was built with shiny new semantic HTML5 elements, and styled them accordingly, consciously avoiding "class-itis" and instead defining styles on <code>header</code>, <code>nav</code>, <code>section</code> etc. This began to work nicely... until the application grew. Unexpected formatting kept popping up due to similar structures appearing in the markup. There were several places that had <code>h1</code> within <code>nav</code>, <code>ul</code> within <code>section</code> and so on. Every time one of these combinations existed in more than one place, there was a clash of styling rules.
+
+Some weeks later, on a completely separate project, I was using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a> on the recommendation of a colleague. Bootstrap requires a large number of classes that must be scattered around the page to make things work. At first this seems clunky and overblown. But, before long, I started to notice that the page layout in this application was much easier to modify. Moving components like navigation around the page was relatively painless. Overriding styles on specific pages and forms was downright easy. Most importantly, clashes between styles on elements didn't seem to happen. No more <code>!important</code>.
+
+The difference in working with these two systems was striking, but I hadn't yet realised what made that difference. A quick survey of the crisp, shiny portion of the internet that is the web design community turned up SMACSS. At first glance, the <a href="http://smacss.com">SMACSS </a>website appears to be pushing a CSS framework, similar to Bootstrap, 960 Grid or similar. But what the site provides is actually more useful than that. It is a guide to writing CSS. The author outlines a process for writing stylesheets that are modular and flexible  by grouping styles together and avoiding dependence on deep hierarchical structure. I won't describe all the details here... go read it!
+

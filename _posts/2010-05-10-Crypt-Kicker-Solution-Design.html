@@ -1,0 +1,192 @@
+---
+layout: post
+title: Crypt Kicker Solution Design
+date: 2010-05-10 22:59:00
+---
+
+I participate in ‘<a href="http://groups.google.com/group/calgary-book-club-">the Calgary book club</a>’, several developers come together every couple of weeks to discuss a book we’ve all been reading. Currently we’re working our way through Steven Skiena’s <a href="http://www.amazon.ca/gp/product/1848000693?ie=UTF8&amp;tag=musihististhr-20&amp;linkCode=as2&amp;camp=15121&amp;creative=390961&amp;creativeASIN=1848000693">Algorithm Design Manual</a><img style="border-style: none ! important; margin: 0px;" src="http://www.assoc-amazon.ca/e/ir?t=musihististhr-20&amp;l=as2&amp;o=15&amp;a=1848000693" border="0" alt="" width="1" height="1" />. It’s a pretty good walk through a lot of computer science fundamentals, particularly for those of us who didn’t study a straight CS course at university.
+
+The other week, we had a stab at the <a href="http://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;category=10&amp;page=show_problem&amp;problem=784">crypt kicker</a> problem from the book. None of us managed to implement a solution that would be deemed acceptable by the <a href="http://uva.onlinejudge.org/">online judge</a>, but we did produce some ideas and partial solutions. Here's my idea, which you can find source code for at <a href="http://github.com/andypaxo/Introduction-to-Algorithms">GitHub</a>.
+
+The general concept is to build up a dictionary, or cipher, of possible letter substitutions based on each word in the input sentence. Progressing through the input from start to finish may cause several equally valid ciphers to be produced, so we keep a list of ciphers. Each word encountered may cause this list to be lengthened or shortened.
+We'll work through the example given in the problem description.
+Just to recap, the word list contains 6 words:
+<pre>and
+dick
+jane
+puff 
+spot
+yertle</pre>
+And there is one sentence to decode:
+<pre>bjvg xsb hxsn xsb qymm xsb rqat xsb pnetfn</pre>
+<h3>Solution Stage 1 : Find ciphers for the first word</h3>
+The first word from our input is bjvg. We'll try this word against every word in the dictionary.
+<em>and</em> : Too short, throw that right out
+<em>dick</em> : That works, we can substitute b → d, j →i, v → c and g → k
+<em>jane</em> : Also works
+<em>puff</em> : Appears to work at first, b → p, j → u, v → f, but wait... g can't stand in for f, because f is already taken. So that doesn't work
+<em>spot</em> : That works
+<em>yertle</em> : Too long
+So we end up with three ciphers, one each for dick, jane and spot:
+<table style="width: 400px;" border="1" cellspacing="0" cellpadding="2">
+<tbody>
+<tr>
+<td width="98" valign="top"><strong>Key</strong></td>
+<td width="100" valign="top"><strong>Cipher 1</strong></td>
+<td width="100" valign="top"><strong>Cipher 2</strong></td>
+<td width="100" valign="top"><strong>Cipher 3</strong></td>
+</tr>
+<tr>
+<td width="98" valign="top">b</td>
+<td width="100" valign="top">d</td>
+<td width="100" valign="top">j</td>
+<td width="100" valign="top">s</td>
+</tr>
+<tr>
+<td width="98" valign="top">j</td>
+<td width="100" valign="top">i</td>
+<td width="100" valign="top">a</td>
+<td width="100" valign="top">p</td>
+</tr>
+<tr>
+<td width="98" valign="top">v</td>
+<td width="100" valign="top">c</td>
+<td width="100" valign="top">n</td>
+<td width="100" valign="top">o</td>
+</tr>
+<tr>
+<td width="98" valign="top">g</td>
+<td width="100" valign="top">k</td>
+<td width="100" valign="top">e</td>
+<td width="100" valign="top">t</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Solution Stage 2 : Find ciphers for the second word</h3>
+We now go through the same process for the second word, and come out with just one cipher:
+<table style="width: 201px;" border="0" cellspacing="0" cellpadding="2">
+<tbody>
+<tr>
+<td width="121" valign="top">Key</td>
+<td width="78" valign="top">Cipher 1</td>
+</tr>
+<tr>
+<td width="119" valign="top">x</td>
+<td width="80" valign="top">a</td>
+</tr>
+<tr>
+<td width="119" valign="top">s</td>
+<td width="80" valign="top">n</td>
+</tr>
+<tr>
+<td width="119" valign="top">b</td>
+<td width="80" valign="top">d</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Solution Stage 3 : Find all the valid combinations</h3>
+This is where the magic happens. With any implementation of a solution to this problem, eliminating possibilities is as important as finding them. In this stage, we get all the ciphers found so far and merge them with all those found in the last step, so in this case we expect to get 3 x 1 = 3 new ciphers (if two were found in stage 2, we would get 3 x 2 = 6). We discard any combinations that conflict with each other.
+To start with, we get the first cipher from stage 1, and combine it with the result of stage 2. This yields the following:
+<table style="width: 401px;" border="1" cellspacing="0" cellpadding="2">
+<tbody>
+<tr>
+<td width="94" valign="top"><strong>Key</strong></td>
+<td width="103" valign="top"><strong>Stage 1, Ciper 1</strong></td>
+<td width="99" valign="top"><strong>Stage 2</strong></td>
+<td width="103" valign="top"><strong>Combination</strong></td>
+</tr>
+<tr>
+<td width="94" valign="top">x</td>
+<td width="103" valign="top"></td>
+<td width="98" valign="top">a</td>
+<td width="105" valign="top">a</td>
+</tr>
+<tr>
+<td width="94" valign="top">s</td>
+<td width="103" valign="top"></td>
+<td width="97" valign="top">n</td>
+<td width="107" valign="top">n</td>
+</tr>
+<tr>
+<td width="94" valign="top">b</td>
+<td width="103" valign="top">d</td>
+<td width="97" valign="top">d</td>
+<td width="108" valign="top">d</td>
+</tr>
+<tr>
+<td width="94" valign="top">j</td>
+<td width="103" valign="top">i</td>
+<td width="97" valign="top"></td>
+<td width="109" valign="top">i</td>
+</tr>
+<tr>
+<td width="94" valign="top">v</td>
+<td width="103" valign="top">c</td>
+<td width="96" valign="top"></td>
+<td width="110" valign="top">c</td>
+</tr>
+<tr>
+<td width="94" valign="top">g</td>
+<td width="103" valign="top">k</td>
+<td width="97" valign="top"></td>
+<td width="111" valign="top">k</td>
+</tr>
+</tbody>
+</table>
+Note that both ciphers have a substitute for b, but as it is the same in both, there is no conflict.
+On the other hand, the second cipher from stage 1 contains b → j, and the cipher from stage 2 contains b → d. Therefore the two cannot be merged, and we drop this possibility:
+<table style="width: 401px;" border="1" cellspacing="0" cellpadding="2">
+<tbody>
+<tr>
+<td width="94" valign="top"><strong>Key</strong></td>
+<td width="103" valign="top"><strong>Stage 1, Ciper 1</strong></td>
+<td width="99" valign="top"><strong>Stage 2</strong></td>
+<td width="103" valign="top"><strong>Combination</strong></td>
+</tr>
+<tr>
+<td width="94" valign="top">x</td>
+<td width="103" valign="top"></td>
+<td width="98" valign="top">a</td>
+<td width="105" valign="top">a</td>
+</tr>
+<tr>
+<td width="94" valign="top">s</td>
+<td width="103" valign="top"></td>
+<td width="97" valign="top">n</td>
+<td width="107" valign="top">n</td>
+</tr>
+<tr>
+<td width="94" valign="top">b</td>
+<td width="103" valign="top">j</td>
+<td width="97" valign="top">d</td>
+<td style="background-color: red; color: white; font-weight: bold;" width="108" valign="top">?</td>
+</tr>
+<tr>
+<td width="94" valign="top">j</td>
+<td width="103" valign="top">a</td>
+<td width="97" valign="top"></td>
+<td width="109" valign="top">a</td>
+</tr>
+<tr>
+<td width="94" valign="top">v</td>
+<td width="103" valign="top">n</td>
+<td width="96" valign="top"></td>
+<td width="110" valign="top">n</td>
+</tr>
+<tr>
+<td width="94" valign="top">g</td>
+<td width="103" valign="top">e</td>
+<td width="97" valign="top"></td>
+<td width="111" valign="top">e</td>
+</tr>
+</tbody>
+</table>
+Finally, the third cipher from stage 1 contains b → s, which also conflicts with the stage 2 cipher.
+So after this stage, we have reduced ourselves to just one possibility. We discard all the ciphers we had before from stage 1 and 2.
+<h3>Stage 4 : Keep going</h3>
+We keep applying stages 2 and 3, generating ciphers, combining them and removing dead ends until we have reached the end of the input sentence. We should be left with all the possible ways to decode the sentence. There may be more than one cipher remaining at the end, but all of them should be able to decode the entire
+input sentence into words from the word list.
+Clear?
+

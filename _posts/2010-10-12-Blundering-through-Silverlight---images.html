@@ -1,0 +1,17 @@
+---
+layout: post
+title: Blundering through Silverlight - images
+date: 2010-10-12 15:53:00
+---
+
+Early in the <a href="http://www.amazon.com/Silverlight-4-Action-Pete-Brown/dp/1935182374?ie=UTF8&amp;tag=musihististhr-20&amp;link_code=btl&amp;camp=213689&amp;creative=392969" target="_blank">Silverlight 4 in Action </a><img style="margin: 0px; padding: 0px !important;" src="http://www.assoc-amazon.com/e/ir?t=musihististhr-20&amp;l=btl&amp;camp=213689&amp;creative=392969&amp;o=1&amp;a=1935182374" border="0" alt="" width="1" height="1" />book, there is an example to work through; Creating a Twitter client with Silverlight. Just the fact that the author can use this as a "hello world" style example gives the reader a little indication of how powerful Silverlight is for building web apps.
+
+However, somewhere along the way I managed to mess things up in just this simple example. Which brings us to sticking point number two:
+<h2>"I can't see any images"</h2>
+One of the many handy controls in the Silverlight developer's toolbox is the <em>Image</em>. To get an image from an internet location, you just set the <em><a href="http://msdn.microsoft.com/en-us/library/system.windows.controls.image.source%28VS.95%29.aspx">Source</a></em> property to the right URI, and the rest works like magic. Only in my case, it didn't. Even stranger than that... I could "hard code" a URI in XAML and see the image in the designer, but there were no images in the running application!
+<div class="separator" style="clear: both; text-align: left;"><a style="clear: left; cssfloat: left; float: left; margin-bottom: 1em; margin-right: 1em;" href="http://3.bp.blogspot.com/_kIB_McdGwig/TLCV0tITKzI/AAAAAAAAADw/qYo19wX607Q/s1600/no+picture.jpg"><img src="http://3.bp.blogspot.com/_kIB_McdGwig/TLCV0tITKzI/AAAAAAAAADw/qYo19wX607Q/s200/no+picture.jpg" border="0" alt="" width="169" height="200" /></a>﻿Let's cut straight to the ending... I hadn't quite followed all the steps. At some point I'd changed the project from running in an ASP.NET server to just running from a file (probably while <a href="http://www.softwarealchemist.net/2010/10/blundering-through-silverlight-debugging/">trying to get the debugger to work</a>). Now, if you read the documentation on the <em>Image.Source</em> property closely, you'll see this paragraph:</div>
+<blockquote>
+<blockquote><em>"Cross-domain URIs are permitted, and specifying the scheme is permitted, but mixing URI schemes (such as accessing an HTTPS image from a Silverlight plug-in hosted on an HTTP-served HTML page) is not permitted"</em></blockquote>
+</blockquote>
+In this case, <strong>an application running at a <em>file://</em> location can't access images from an <em>http://</em> location</strong>. Switch back to running using ASP.NET, and everything is fine.
+

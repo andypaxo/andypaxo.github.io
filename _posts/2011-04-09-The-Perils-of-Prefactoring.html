@@ -1,0 +1,16 @@
+---
+layout: post
+title: The Perils of Prefactoring
+date: 2011-04-09 20:05:09
+---
+
+I am increasingly aware of the danger of 'prefactoring'. That is, stewing over the minute details of code design before just <em>getting the thing to work</em>.<!--more-->Apparently the name 'prefactoring' is taken, maybe we should call it 'premature factorization' in honour of Donald Knuth.
+
+As a journeyman developer reads more and more about how to design good code, how to structure good code, how to recognize good code, etc. etc. the principles that he picks up move to the forefront of his mind when writing new code. This is not always a bad thing, but it is easy to get in to the trap of changing the design so many times <em>before </em>having a clear purpose for the code that a developer loses sight of the goal he is trying to achieve. Hours can be lost perfecting the design of code that, in the end, turns out to be unimportant or unnecessary.
+
+So, I am advocating the creation of <em>bad code</em>. Wait... that doesn't sound right!
+
+That is right, but within constraints.  Pick up a copy of <em>Clean Code</em>,<em> The Pragmatic Programmer</em> or <em>Working With Legacy Code</em>. Hear that...? The background hum? Listen carefully... "Red, Green, Refactor, Red, Green, Refactor". That's the drumbeat of test driven development. The <em>bad</em> code only exists between the Red and Green beats. As soon as Green beat is sounded we move on to refactoring. Then you can get your rules, patterns and principles out and polish that code until it shines!
+
+Remember, you can only get away with that sloppy code if you sound that last beat of the drum loud and clear - never neglect to refactor!
+

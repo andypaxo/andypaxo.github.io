@@ -1,0 +1,64 @@
+---
+layout: post
+title: Hiding links that shouldn’t be shown in ASP.NET MVC
+date: 2010-09-08 15:26:00
+---
+
+<h2>Problem</h2>
+Any web application has pages that should be seen by some users and not by others. At the very least, there are administrative pages and public pages.
+
+In the past, I’ve always used ad-hoc code when generating pages to determine which links (or tabs, labels etc.) should show up for which user. In ASP.NET this might look something like this:
+<pre class="csharpcode"><span class="asp">&lt;%</span> <span class="kwrd">if</span> (userCanEditDocuments) { <span class="asp">%&gt;
+ </span><span class="asp">&lt;%</span>=
+  Html.ActionLink
+  (<span class="str">"Documents"</span>, <span class="str">"Edit"</span>, <span class="str">"Edit my documents"</span>)
+ <span class="asp">%&gt;
+</span><span class="asp">&lt;%</span> } <span class="asp">%&gt;</span></pre>
+<!-- .csharpcode, .csharpcode pre{font-size: small;color: black;font-family: consolas, "Courier New", courier, monospace;background-color: #ffffff;} .csharpcode pre { margin: 0em; } .csharpcode .rem { color: #008000; } .csharpcode .kwrd { color: #0000ff; } .csharpcode .str { color: #006080; } .csharpcode .op { color: #0000c0; } .csharpcode .preproc { color: #cc6633; } .csharpcode .asp { background-color: #ffff00; } .csharpcode .html { color: #800000; } .csharpcode .attr { color: #ff0000; } .csharpcode .alt {background-color: #f4f4f4;width: 100%;margin: 0em;} .csharpcode .lnum { color: #606060; }  -->
+
+This works, but it entails far too much duplication. Duplication on the front end entering these conditionals. Duplication on the back end calculating the relevant user permissions for each page.
+<h2>Solution</h2>
+If you use <a href="http://haacked.com/archive/2008/08/14/aspnetmvc-filters.aspx">authorization filters</a> to determine the access to each action, the information you need to is available to the view already. By accessing these attributes, it’s possible to replace the above view with something like this:
+<pre class="csharpcode"><span class="asp">&lt;%</span>=
+ Html.LinkIfAccessible
+ (<span class="str">"Documents"</span>, <span class="str">"Edit"</span>, "Edit my documents)
+<span class="asp">%&gt;</span></pre>
+Less code on the front end, and best of all <em>no code in the action to write extra view data</em>.
+
+The method to determine if a link is accessible is a little involved:
+<pre class="csharpcode"><span class="kwrd">public</span> <span class="kwrd">bool</span> IsAccessible(<span class="kwrd">string</span> controller, <span class="kwrd">string</span> action) {
+ IController controllerImpl = <span class="kwrd">null</span>;
+ IControllerFactory controllerFactory = <span class="kwrd">null</span>;<span class="kwrd">
+ try</span>{
+  var httpContext = <span class="kwrd">new</span> HttpContextWrapper(HttpContext.Current);
+  var requestContext = <span class="kwrd">new</span> RequestContext(httpContext, <span class="kwrd">new</span> RouteData());
+
+  controllerFactory = ControllerBuilder.Current.GetControllerFactory();
+  controllerImpl = controllerFactory.CreateController(requestContext, controller);
+
+  var controllerContext = <span class="kwrd">new</span> ControllerContext(requestContext, (ControllerBase)controllerImpl);
+  var controllerDescriptor = <span class="kwrd">new</span> ReflectedControllerDescriptor(controllerImpl.GetType());
+  var actionDescriptor = controllerDescriptor.FindAction(controllerContext, action);
+  var filters = actionDescriptor.GetFilters();
+
+  var authorizationContext = <span class="kwrd">new</span> AuthorizationContext(controllerContext, actionDescriptor);<span class="kwrd">
+  foreach</span> (var filter <span class="kwrd">in</span> filters.AuthorizationFilters)
+   filter.OnAuthorization(authorizationContext);
+
+  var result = authorizationContext.Result;
+  <span class="kwrd">return</span> !(result <span class="kwrd">is</span> UnauthorizedAccessResult);
+ }
+ <span class="kwrd">finally</span> {
+  <span class="kwrd">if</span> (controllerFactory != <span class="kwrd">null</span> &amp;&amp; controllerImpl != <span class="kwrd">null</span>)
+   controllerFactory.ReleaseController(controllerImpl);
+ }
+}</pre>
+Although this method is kind of scary, it’s really just making use of what’s already in ASP.NET MVC.
+<h2>Caveats</h2>
+Using this does place a couple of restrictions on the authorization filters used by your actions.
+<ol>
+	<li>Your authorization filters should not have any side-effects (this is a good idea anyway), as this method does actually run the filter methods</li>
+	<li>The view result from your filters needs to be set to a recognisable type (in this case <em>UnauthorizedAccessResult</em>) in the event of the user not being authorized.</li>
+</ol>
+This solution does not work in every circumstance, but where it does work it saves a lot of fiddly verbose code – which is one of the great strengths of the MVC framework.
+
