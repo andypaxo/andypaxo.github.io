@@ -1,4 +1,4 @@
-name: Your New Jekyll Site
+name: The Software Alchemist
 markdown: redcarpet
 pygments: true
 permalink: /:year/:month/:title

@@ -5,7 +5,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>{{ page.title }}</title>
         <meta name="viewport" content="width=device-width">
-
+        
+        <link href='http://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
         <!-- syntax highlighting CSS -->
         <link rel="stylesheet" href="/css/syntax.css">
 
@@ -15,26 +16,25 @@
     </head>
     <body>
 
+        <div class="header"><div class="title">
+          <h1><a href="/">{{ site.name }}</a></h1>
+        </div></div>
+
         <div class="site">
-          <div class="header">
-            <h1 class="title"><a href="/">{{ site.name }}</a></h1>
-            <a class="extra" href="/">home</a>
-          </div>
 
           {{ content }}
 
           <div class="footer">
             <div class="contact">
               <p>
-                Your Name<br />
-                What You Are<br />
-                you@example.com
+                Hi! I'm Andy, a software developer in the frozen reaches of the north (Canada).<br/>
+                These are my observations, insights and general blathering about the craft.
               </p>
             </div>
             <div class="contact">
               <p>
-                <a href="https://github.com/yourusername">github.com/yourusername</a><br />
-                <a href="https://twitter.com/yourusername">twitter.com/yourusername</a><br />
+                <a href="https://github.com/andypaxo">github.com/andypaxo</a><br />
+                <a href="https://twitter.com/andypaxo">twitter.com/andypaxo</a><br />
               </p>
             </div>
           </div>
