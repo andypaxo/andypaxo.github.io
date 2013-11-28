@@ -2,3 +2,4 @@ name: The Software Alchemist
 markdown: redcarpet
 pygments: true
 permalink: /:year/:month/:title
+url: http://softwarealchemist.net
