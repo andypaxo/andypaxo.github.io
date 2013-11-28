@@ -1,4 +1,5 @@
 name: The Software Alchemist
+description: softwarealchemist.net
 markdown: redcarpet
 pygments: true
 permalink: /:year/:month/:title
