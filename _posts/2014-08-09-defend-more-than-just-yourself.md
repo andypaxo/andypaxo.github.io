@@ -14,4 +14,4 @@ Easier said than done. And you and I, dear reader, are not everyone. We are (pro
 
 So, we're going to explore how we might plug up some of those holes. We owe it to everyone who uses our software.
 
-We're embarking on a series of posts outlining how to demonstrate and defend against some common attacks. We'll start with the (hopefully) well known OWASP top ten.
+We're embarking on a series of posts outlining how to demonstrate and defend against some common attacks. We'll start with the (hopefully) well known [OWASP top ten](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project#tab=OWASP_Top_10_for_2013).
