@@ -1,0 +1,82 @@
+---
+layout: post
+title: OWASP 01 - Injection
+date: 2014-08-10
+---
+
+Following on from the [introduction](http://softwarealchemist.net/2014/08/defend-more-than-just-yourself/), let's now dig in to the top ten vulnerabilities in web services. OWASP maintains a list of common security problems, ranked by both the prevalence of the problem and the potential harm done to businesses and users who could be affected.
+
+To be sure, everything in this series has been covered in depth on the web before, but it's so important that it bears repeating.
+
+Number one is, as it has been since 2010, the [injection attack](https://www.owasp.org/index.php/Top_10_2013-A1-Injection). The most well known variation on this is SQL injection, but it's worth realising that injection vulnerabilities can pop up anywhere that user input is used in conjunction with a query language or interpreter. The risk might pop up in communication with a back end service in a web app, a PostScript printer in a line-of-business application, or a Lua script in a game.
+
+Right now, we're going to focus on the classic SQL injection.
+
+Demonstration
+=============
+
+What we're doing here is definitely hacking, and not in the maker / tinkerer sense. So, the usual cautions apply. Do this only to sites which you own or have explicit permission to break. Playing at "leet haxor" and vandalising other people's websites isn't cool. Besides which, if that's your goal, you'll find far better resources than here, I have no experience in hacking, and I'm sure anyone who does will be highly amused by the fumbling around which is about to ensue.
+
+For this example, we're going to try and do some nasty stuff to the "supercar showdown" at [hackyourselffirst.troyhunt.com](http://hackyourselffirst.troyhunt.com). This is a sandbox website that has been explicitly set up for developers like you and I to try our security skills out on.
+
+So, let's investigate the site. After registering a new account, we can select any car on the homepage to get to a voting page. Open your browser's development tools, select the network tab and take a look what happens when casting a vote.
+
+We get a POST request to `/api/vote` with a payload that looks like this. 
+
+	userId=45176&supercarId=1&comments=comment
+
+Let's try and use the API for our own nefarious purposes. First of all we'll take a stab in the dark and see what happens. Fire this off from your handy *nix command line:
+
+	curl -b "AuthCookie=466...E3D" -d "userId=45176&supercarId=7&comments=comment';UPDATE Users SET firstname='Eric'" hackyourselffirst.troyhunt.com/api/vote
+
+You will, of course, need to replace your `AuthCookie` token and user ID with ones gleaned from your own session as the website is reset frequently.
+
+See that odd comment variable in our payload? Let's have a closer look:
+
+	comments=comment';UPDATE Users SET firstname='Eric'
+
+What we're hoping for here is that our comment is concatenated onto the end of a SQL INSERT statement. The quote and semicolon end the previous statement, then we start a new one.
+
+After executing that command, what we get in return is a nice glob of JSON, with the following little gem in it:
+
+	ExceptionMessage=Incorrect syntax near ';'.
+	Unclosed quotation mark after the character string 'Eric')'.
+
+That's a message straight from SQL. It's trying to interpret the garbage we added to the POST request. So now we know that we're on to something. 
+
+After some fiddling around with the syntax of the request, and getting negative feedback in the form of either the same error message, or no message at all (and some very strange comments being posted on the website regarding the Lamborghini Veneno), we come up with the following payload:
+
+	userId=45176&supercarId=7&comments='); UPDATE users SET fname='Eric';--
+
+Which results in the following error message:
+
+	Invalid object name 'users'.
+
+So now we have the syntax right, we just have to poke around for a table to mess with. A bit more fiddling and this...
+
+	userId=45176&supercarId=7&comments='); UPDATE supercar SET fname='Eric';--
+
+gives us this...
+
+	Invalid column name 'fname'.
+
+So we know that there's a table called "supercar". We're getting close. Now we just have to find a valid column. More poking around and we end up with this nugget...
+
+	UPDATE supercar SET description='Smells like that ol\` janx spirit';--
+
+And now the entire site is scattered with our witty little mixed pop culture reference here. Guess we should have ordered a WHERE with that.
+
+Mitigation
+==========
+
+Now we've seen how things can go wrong, we'd better take a look at how we can make them right.
+
+First off: Don't make error messages visible! While not specifically related to SQL injection, this is a huge problem for protecting against a variety of attacks. The whole process of executing this attack relied on reading the error messages we were getting from SQL. Don't let your users poke around under the hood!
+
+The saddest thing about the prevalence of SQL injection attacks is that SQL already comes with a super simple tool to prevent them! Parameterize all your queries and only ever pass in user input through parameters. Simple as that. If you're unfamiliar with parameterization, check the reference for your database engine, and hit up the link to the OWASP site at the top of the page.
+
+I mentioned at the start of this article that SQL isn't the only software you might rely on that is vulnerable to attacks of this nature. And not all interpreters have a built in way of constructing safe inputs like SQL does. In this case, you may have to fall back on escaping dangerous characters in your input. Be really careful with this. Best of all, don't rely only on yourself to make a robust escaping procedure. Use a third party solution that is used and tested by many people, keep it patched, and read the release notes, bug tracker, and project updates to know what security risks exist. (Yes, really. Read the release notes. People actually do that.)
+
+A note on frameworks: It's easy to think "I use an ORM" or some other such framework, and then to belive that your framework takes care of everything. Take another look at that OWASP link. On the very first page, there's a demonstration of how to introduce a security hole simply by misusing Hibernate. If you do use a framework, make sure you know how to do it. And, as with any third party library, keep up to date on known bugs so that you know where the risks lie.
+
+If you've made it this far, well done. Now go patch your code.
