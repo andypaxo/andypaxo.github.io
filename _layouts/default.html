@@ -1,52 +1,55 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>{{ page.title }}</title>
-        <meta name="viewport" content="width=device-width">
-        
-        <link href='http://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>{{ page.title }}</title>
+    <meta name="viewport" content="width=device-width">
+    
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="http://softwarealchemist.net/feed.xml">
+</head>
+<body>
+  <div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+            <h1 class="brand-title">{{ site.name }}</h1>
+            <h2 class="brand-tagline">Subtitle</h2>
 
-        <link rel="stylesheet" href="/css/syntax.css">
-        <link rel="stylesheet" href="/css/main.css">
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="http://softwarealchemist.net/feed.xml">
-
-    </head>
-    <body>
-
-        <div class="header"><div class="title">
-          <h1><a href="/">{{ site.name }}</a></h1>
-        </div></div>
-
-        <div class="site">
-
-          {{ content }}
-
-          <div class="footer">
-            <div class="contact">
-              <p>
-                Hi! I'm Andy, a software developer in the frozen reaches of the north (Canada).<br/>
-                These are my observations, insights and general blathering about the craft.
-              </p>
-            </div>
-            <div class="contact">
-              <p>
-                <a href="https://github.com/andypaxo">github.com/andypaxo</a><br />
-                <a href="https://twitter.com/andypaxo">twitter.com/andypaxo</a><br />
-              </p>
-            </div>
-          </div>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="pure-button" target="_blank" href="https://github.com/andypaxo">github</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pure-button" target="_blank" href="http://stackexchange.com/users/19760/andypaxo">Stack Exchange</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    </div>
+    <div class="content pure-u-1 pure-u-md-3-4">
+      <div>
+        <div class="posts">
+          {{ content }}
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+    </div>
+  </div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-16526325-1', 'auto');
-  ga('send', 'pageview');
+    ga('create', 'UA-16526325-1', 'auto');
+    ga('send', 'pageview');
 
-</script>
-    </body>
+  </script>
+</body>
 </html>
