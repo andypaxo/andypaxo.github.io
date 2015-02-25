@@ -1,0 +1,3 @@
+# Force Unix line endings (or else excerpts get messed up)
+*.md text eol=lf
+*.html text eol=lf
