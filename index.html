@@ -9,10 +9,8 @@ title: softwarealchemist.net
       <h2 class="post-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
       <p class="post-meta">{{ post.date | date_to_string }}</p>
       <div class="post-description">
-        <p>
-          {{ post.excerpt }}
-        </p>
-        <a href="{{ post.url }}">Read more&hellip;</a>
+        {{ post.excerpt }}
+        <a href="{{ post.url }}" class="pure-button">Read more</a>
       </div>
     </header>
   </section>
