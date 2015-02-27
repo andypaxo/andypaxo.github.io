@@ -4,3 +4,4 @@ markdown: redcarpet
 highlighter: pygments
 permalink: /:year/:month/:title
 url: http://softwarealchemist.net
+paginate: 8

@@ -44,7 +44,13 @@ h3 {
     background: $sidebar-color;
     background-image: url(/img/footer_lodyas.png);
     background-size: cover;
+}
+.sidebar a {
     color: #fff;
+}
+.sidebar a:hover {
+    text-decoration: none;
+    color: $sidebar-accent;
 }
 
 .brand-title,
@@ -145,8 +151,7 @@ h3 {
     color: #999;
 }
 .footer a {
-    color: #ccc;
-    font-size: 80%;
+    width: 8em;
 }
 .footer .pure-menu a:hover,
 .footer .pure-menu a:focus {
